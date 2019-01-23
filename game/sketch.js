@@ -10,22 +10,23 @@ var contador=0;
 function setup(){
 
 	createCanvas(900, 900);
-	//bg = loadImage("image/img.PNG");
 
-	FLOOR.push(new Floor(0));
-	for (var i = 1; i < 8; i++) {
+	FLOOR.push(new Floor(-25));
+	
+	for (var i = 0; i < 7; i++) {
 		FLOOR.push(new Floor(n*height/12));
 		n+=1.5 
 	}
+
 	FLOOR.push(new Floor(850));
 
 	n=1;
 	for (var i = 0; i < 7; i++) {
 		POSCI.push(n*height/12+40);
 		if(i<4)
-			FROGS.push(new redFrog(POSCI[i],color(255),i));
+			FROGS.push(new redFrog(POSCI[i],color(175,43,47),i));
 		else 
-			FROGS.push(new greenFrog(POSCI[i],color(255, 204, 0),i));
+			FROGS.push(new greenFrog(POSCI[i],color(47, 175, 43),i));
 		n+=1.5 
 	}
 	FROGS[3].y=0;
@@ -35,20 +36,20 @@ function setup(){
 
 	FLOOR[3].busy=false;
 
-
-	FROGS[2].x=POSCI[(FROGS[2].id+1)];
+	POSCI.map(function (x){console.log(x);})
+	/**FROGS[2].x=POSCI[(FROGS[2].id+1)];
 	FLOOR[FROGS[2].id].busy= false;
-	FLOOR[(FROGS[2].id+1)].busy= true;
+	FLOOR[(FROGS[2].id+1)].busy= true;**/
 
 }
 
 function draw() {
   background(0);
 
-	for (var i = FLOOR.length - 2; i >= 1; i--) {
+	for (var i = FLOOR.length-2	; i >= 1; i--) {
 		FLOOR[i].show();
 	}
-	for (var i = FROGS.length - 1; i >= 0; i--) {
+	for (var i = FROGS.length-1; i >= 0; i--) {
 		FROGS[i].show();
 	}
 }
@@ -58,7 +59,7 @@ function mousePressed(){
 	for (var i = FROGS.length - 1; i >= 0; i--) {
 		FROGS[i].clicked(mouseX,mouseY);
 	}
-
+	//se reordenan los indices
 	for (let i = POSCI.length - 2; i >= 1; i--) {
 		for (let j = FROGS.length - 1; j >= 0; j--) {
 			if(FROGS[j].x===POSCI[i]){
@@ -66,7 +67,7 @@ function mousePressed(){
 			FROGS[j].id=i;
 			console.log(FROGS[j].id,i);			
 		}
-		}
+	}
 		
 	}
 	FLOOR.map(function(x,ind){console.log("piso "+ind+" "+x.busy)});
@@ -82,15 +83,13 @@ function redFrog(pos,col,id){
  	this.id=id;
 
  	this.show=()=>{
+ 		fill(0);
  		if(this.drawed===true)
 			fill(col);
-		else
-			fill(0);
 		ellipse(this.x,this.y,40,40);
 	}
 			
 	this.clicked=(x,y)=>{
-
 		let d=dist(x,y,this.x,this.y);
 		
 		if(d<20){
@@ -142,28 +141,37 @@ function greenFrog(pos,col,id){
 		if(d<20){
 			console.log(this.id,FLOOR[this.id].busy);
 			console.log("clicked "+(this.id));
-
-			if(FLOOR[(this.id-1)].busy && !FLOOR[(this.id-2)].busy){
+			if(this.id>1){
+				if(FLOOR[(this.id-1)].busy && !FLOOR[(this.id-2)].busy){
 					console.log("movido adelante pos "+ (this.id-2));
 					this.x=POSCI[this.id-2];
 					FLOOR[this.id].busy= false;
 					FLOOR[this.id-2].busy= true;					
-			}
+				}
+				else if(FLOOR[(this.id-2)].busy && !FLOOR[(this.id-1)].busy){
 
-			else if(FLOOR[(this.id-2)].busy && !FLOOR[(this.id-1)].busy){
-					
 					console.log("saltado a " + (this.id-1));				
 					this.x=POSCI[this.id-1];
 					FLOOR[this.id].busy= false;
 					FLOOR[this.id-1].busy= true;			
+				}
+			}
+			else{
+				console.log(FLOOR[1].x,POSCI[0]);
+				if(FLOOR[1].busy){
+					console.log("holaaaa");
+					this.x=POSCI[0];
+					FLOOR[this.id].busy= false;
+					FLOOR[this.id-1].busy= true;
+				}
 
 			}
-				console.log(this.id,FLOOR[(this.id)].busy);
-					contador++;
-					console.log("contador:"+contador);
+
+			console.log(this.id,FLOOR[(this.id)].busy);
+			contador++;
+			console.log("contador:"+contador);
 
 		}
-
 	}	
 }
 
