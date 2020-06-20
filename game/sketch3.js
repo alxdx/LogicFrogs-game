@@ -2,14 +2,31 @@ var FROGS=[];
 var FLOOR=[];
 var n=1;
 let velocity={x: 0,y: 0};
-let g=.98
+let g=.98;
+var click;
+var ig,bg;
+setup();
+draw();
 
 function setup(){
-	createCanvas(900,900);
+	let c= createCanvas(900,900);
+	c.parent('game');
+
+	ig=new img();
+	bg=loadImage('img/pg.jpg'); 
+	//carga los rectangulos
 	for (var i = 0; i < 7; i++) {
-		FLOOR.push(new Floor(n*height/12));
+		if(i<3)
+			FLOOR.push(new Floor(n*height/12,'#49704A'));
+		else if(i>3)
+			FLOOR.push(new Floor(n*height/12,'#FBD19E'));			
+		else if(i==3)
+			FLOOR.push(new Floor(n*height/12,'#ffffff'));			
+
 		n+=1.5 
 	}
+	//carga los circulos
+
 	n=1;
 	for (var i = 0; i < 7; i++) {
 		if(i<3)
@@ -19,158 +36,84 @@ function setup(){
 		n+=1.5 
 	}
 	FLOOR[3].busy=false;
-	console.log(FROGS);
-	
+	click=new click();
 }
+
 function draw(){
-	background(0);
+
+	background('#001544');
+	//noStroke();
+	push();
+	scale(1.3);
+	image(bg, 0, 0);
+	pop();
+	//dibuja las ranas y las deja saltar si se clickean
 	for (var i = FROGS.length-1; i >= 0; i--) {
 		FROGS[i].show();
 		if(FROGS[i].letBounce){
-			console.log("hiola")
 			FROGS[i].jump(velocity,g);
 		}
 	}
+		//dibuja los rectangulos
 	for (var i = FLOOR.length-1	; i >= 0; i--) {
 		FLOOR[i].show();
 	}
+	push();
+	//efecto del mouse
+	click.wait(mouseX,mouseY);
+	if(click.letShow){
+		click.show();
+	}
+	pop()
+	//si gana imprime letrero
+	if(FROGS[0].on==4 && FROGS[1].on==5 && FROGS[2].on==6 && FROGS[3].on==0 && FROGS[4].on==1 && FROGS[5].on==2){
+		ig.show();
+		ig.deslizar();		
+	}
 }
-function mousePressed(){
-	console.log(FROGS);
+//funcion para cuando el mouse se clickea
+function mouseClicked(){
+	//revisa las cordenadas del click
 	for (var i = FROGS.length - 1; i >= 0; i--) {
 		FROGS[i].clicked(mouseX,mouseY);
 	}
-
+}
+function mousePressed(){
+	click.letShow=true;
 }
 
-function redFrog(poscision,id,fl){
-	this.x=poscision;
-	this.y=280;
-	this.id=id;
-	this.on=fl;
+
+function click(){
+	let siz=10;
+	let h=0,o=100;
+	let letShow=false;
+	this.wait=(x,y)=>{
+		noStroke();
+		fill(h,o);
+		ellipse(x,y,siz,siz);
+	}
 	this.show=()=>{
-		fill(175,43,47)
-		ellipse(this.x,this.y,40,40);
-	}
-	this.letJump=false;
-	this.jump=(v,gv)=>{
-		this.x+=v.x;
-    	this.y-=v.y;
-    	v.y-=gv;
-    	console.log(this.y,"velocity:",v.y,"y:",this.y);
-     	if(this.y>(280)){
-      		console.log("stop");
-      		v.y= 0;
-      		gv=0;
-      		v.x=0;
-      		this.letBounce=false;
-     	} 
-	}
-	this.clicked=(x,y)=>{
-		let d=dist(x,y,this.x,this.y);
-		if(d<20){
-			if(this.id===3 && this.on===5){
-				if(!FLOOR[6].busy){
-					FLOOR[this.on].busy=false;
-					FLOOR[this.on+1].busy=true;
-					this.on+=1;
-					velocity.x=4.58;
-					velocity.y=11.2;
-					g=.98;
-					this.letBounce=true;
-				}
-			}
-			else if(FLOOR[this.on+1].busy && !FLOOR[this.on+2].busy){
-				FLOOR[this.on].busy=false;
-				FLOOR[this.on+2].busy=true;
-				this.on+=2;
-				velocity.x=7.38;
-				velocity.y=14.2;
-				g=.98;
-				this.letBounce=true;
-			}
-			else if(!FLOOR[this.on+1].busy && FLOOR[this.on+2].busy){
-				FLOOR[this.on].busy=false;
-				FLOOR[this.on+1].busy=true;
-				this.on+=1;
-				velocity.x=4.58;
-				velocity.y=11.2;
-				g=.98;
-				this.letBounce=true;
-
-			}			
-
-		}
-
-	}
-}
-function greenFrog(poscision,id,fl){
-	this.x=poscision;
-	this.y=280;
-	this.id=id;
-	this.on=fl;
-	this.show=()=>{
-		fill(47, 175, 43);
-		ellipse(this.x,this.y,40,40);
-	}
-	this.letJump=false;
-	this.jump=(v,gv)=>{
-		this.x-=v.x;
-    	this.y-=v.y;
-    	v.y-=gv;
-    	console.log(this.y,"velocity:",v.y,"y:",this.y);
-     	if(this.y>280){
-      		console.log("stop");
-      		v.y= 0;
-      		gv=0;
-      		v.x=0;
-      		this.letBounce=false;
-     	} 
-	}
-	this.clicked=(x,y)=>{
-		let d=dist(x,y,this.x,this.y);
-		if(d<20){
-			if(this.id===4 && this.on===1){
-				if(!FLOOR[0].busy){
-					FLOOR[this.on].busy=false;
-					FLOOR[this.on-1].busy=true;
-					this.on-=1;
-					velocity.x= 4.58;
-					velocity.y=11.2;
-					g=.98;
-					this.letBounce=true;
-				}
-			}
-			else if(FLOOR[this.on-1].busy && !FLOOR[this.on-2].busy){
-				FLOOR[this.on].busy=false;
-				FLOOR[this.on-2].busy=true;
-				this.on-=2;
-				velocity.x= 7.38;
-				velocity.y=14.2;
-				g=.98;
-				this.letBounce=true;
-			}
-			else if(!FLOOR[this.on-1].busy && FLOOR[this.on-2].busy){
-				FLOOR[this.on].busy=false;
-				FLOOR[this.on-1].busy=true;
-				this.on-=1;
-				velocity.x= 4.58;
-				velocity.y=11.2;
-				g=.98;
-				this.letBounce=true;
-
-			}		
+		h=255;
+		siz+=30;
+		o-=5
+		if(siz>1000 || o==0){
+			siz=0;
+			o=100;
+			this.letShow=false;	
 		}
 	}
-
 }
-function Floor(poscision){
-	this.x=poscision;
-	this.y=width/3;
-	this.busy=true;
-
+function img(){
+	dd= -480;
+	img = loadImage('img/win.png'); 
 	this.show=()=>{
-		fill(255);
-		rect(this.x,this.y,80,20);
+		image(img, 100, dd);
+	}
+	this.deslizar=()=>{
+		dd+=10;
+		if(dd > -50)
+			dd=0;
 	}
 }
+
+

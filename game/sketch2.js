@@ -1,6 +1,6 @@
 var ball;
 let velocity={x: 4,y: 20};
-let g=.98;
+let g=2.98;
 function setup(){
   createCanvas(900,600);
   ball= new Ball();

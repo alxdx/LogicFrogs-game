@@ -1,37 +1,35 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="ES">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>p5.js example</title>
-    <style> body {padding: 0; margin: 0;} </style>
-    <script src="../p5.min.js"></script>
-    <script src="sketch3.js"></script>
-    <script src="Floor.js"></script>
-    <style>
-      body { margin: 0;
-        overflow: hidden;
-        background-color: #FFFFF;: 
-       }
-      
-      div {
-        position: absolute;
-        z-index: 10;
-        color: #fff;
-        font-family: monospace;
-        text-align: center;
-        margin: 10px;
-        width: 20%;
-        float:left;
-      }
-            
-  </style>
+    <title>juego</title>
+    <!-- caragar los scripts -->
+    <link href="style.css" rel="stylesheet">
+    <script src="p5.min.js" defer></script>
+    <script src="sketch3.js" defer ></script>
+    <script src="Floor.js" defer></script>
+    <script src="redFrog.js" defer></script>
+    <script src="greenFrog.js" defer></script><
   </head>
   <body>
-    <div>
-    <font size='4'>Da click en un circulo para empezar </font>
-    <p></p>
-    
-  </div>
+    <div id="game"></div>
+    <div id="sidebar">
+
+      <header>
+        <h1>Frog Logic Game Remake</h1>
+      </header>
+      <main>
+        <h2>Instrucciones</h2>
+        <ul>
+          <li> <span class="control">Da click </span> en los circulos para que avancen una casilla a la vez </li>
+          <li>Un circulo <span class="control" >puede saltar</span>  a otro si la casilla destino esta libre</li>
+          <li>Ganas cuando todos los circulos esten en su color :)</li>
+          <li> <span class="control">Presiona el boton</span> de abajo si quieres reiniciar</li>
+        </ul>
+      <div id="boton">
+      <button type="button" onclick= "location.reload()" class="button">Reiniciar</button>
+      </div>
+      </main>
+    </div>  
   </body>
 </html>

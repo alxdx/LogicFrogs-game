@@ -1,0 +1,100 @@
+ @font-face {
+    font-family: 'Source Code Pro';
+    src: url('fonts/SourceCodePro-Regular.ttf');
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* Colors */
+
+:root {
+    --accent1: #F1C40F;
+    --accent2: #E58F65;
+    --bg: #001544;
+    --sidebar: #4E046D;
+}
+
+html, body {
+    margin: 0;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--fg);
+    display: flex;
+    flex-direction: row;
+    font-family: 'Source Code Pro', monospace;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+/** diseño del juego**/
+#game {
+    margin: 20px;
+    align-items: center;
+    display: flex;
+    flex: 1;
+}
+/** diseño de las instrucciones**/
+#sidebar {
+    margin-right: 10px;
+    background-color: #304d7a;
+}
+/** Diseño del titulo**/
+header, main, footer {
+    padding: 36px;/** espaciado**/
+}
+
+main {
+    flex: 1;
+    padding-bottom: 0;
+    padding-top: 0;
+}
+
+footer {
+    padding-bottom: 0;
+}
+
+
+/* Page content */
+
+canvas {
+    display: block;
+    margin: 0 auto;
+}
+/** diseño de los titulos*/
+h1, h2, h3, h4, h5, h6 {
+    color: var(--accent1);
+    line-height: 1.2;
+}
+/** diseño de la lista*/
+
+ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+li {
+    margin: 10px 0;
+}
+
+.control {
+    color: var(--accent2);
+    font-weight: bold;
+}
+#boton {
+    text-align: center;
+}
+.button{
+    background-color: #F1C40F;
+    border: none;
+    color: black;
+    padding: 15px 32px;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: 'Source Code Pro', monospace;
+}
+
+
